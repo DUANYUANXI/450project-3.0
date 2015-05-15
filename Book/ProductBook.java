@@ -30,14 +30,14 @@ public class ProductBook {
 	private ProductBookSide sellSide;
 	private ProductBookSide buySide;
 	private String lastMarketDataValue;
-	private HashSet<String> userQuotes = new HashSet<>();
-	private HashMap<Price, ArrayList<Tradable>> oldEntries = new HashMap< Price, ArrayList<Tradable>>();
+	private HashSet<String> userQuotes; 
+	private HashMap<Price, ArrayList<Tradable>> oldEntries; 
 	
 	public ProductBook(String productSymbolIn) throws InvalidInputException
 	{
+		userQuotes = new HashSet<>();
+		oldEntries = new HashMap< Price, ArrayList<Tradable>>();
 		setProductSymbol(productSymbolIn);
-		
-	
 		sellSide=new ProductBookSide(this,"SELL");//?
 		buySide=new ProductBookSide(this,"BUY");//?
 		
@@ -45,7 +45,7 @@ public class ProductBook {
 	}
 	private void setProductSymbol(String productSymbolIn) throws InvalidInputException {
 
-		if(productSymbolIn==null||productSymbol.isEmpty())
+		if(productSymbolIn==null||productSymbolIn.isEmpty())
 			throw new InvalidInputException("Product symbol can't be null or empty");
 		else productSymbol=productSymbolIn;
 		

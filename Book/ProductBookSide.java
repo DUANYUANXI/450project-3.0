@@ -20,7 +20,7 @@ public class ProductBookSide {
 	
 	
 	private String side;
-	private HashMap<Price, ArrayList<Tradable>> bookEntries = new HashMap< Price, ArrayList<Tradable>>();
+	private HashMap<Price, ArrayList<Tradable>> bookEntries;
 	private TradeProcessor tradeProcessor;
 	private ProductBook productBookParent;
 	
@@ -28,6 +28,7 @@ public class ProductBookSide {
 	//¡°parent¡± product book in this handout. This should be set in the constructor (and should not be null).
 	public ProductBookSide(ProductBook object, String sideIn) throws InvalidInputException
 	{
+		bookEntries = new HashMap< Price, ArrayList<Tradable>>();
 		setSide(sideIn);
 		setProductBookSideParent(object);
 		//The TradeProcessor data member should be setup in the constructor, setting it to a
