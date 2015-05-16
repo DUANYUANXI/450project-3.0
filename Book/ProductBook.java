@@ -208,6 +208,7 @@ public class ProductBook {
 					buySide.addToBook(trd);
 				else if(side.equals("SELL"))
 					sellSide.addToBook(trd);
+				return;
 			}
 			
 			HashMap<String, FillMessage> allFills = null;
@@ -272,12 +273,17 @@ public class ProductBook {
 					CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
 					lastMarketDataValue=s;
 			}//?????
+			if(lastMarketDataValue!=s)
+			{
+				Price closedP=PriceFactory.makeLimitPrice(0);
+				 mdto=new MarketDataDTO(productSymbol,closedP,buySide.topOfBookVolume(),closedP,sellSide.topOfBookVolume());
+					CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
+					lastMarketDataValue=s;
 			}
-			
-			 else 
-			 {
+		}
+		else {
 				 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+sellSide.topOfBookPrice().toString()+sellSide.topOfBookVolume();
-				 if(lastMarketDataValue.equals(s))
+				 if(!(lastMarketDataValue==s))
 				 {
 			
 			 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());

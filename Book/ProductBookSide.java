@@ -337,17 +337,18 @@ public class ProductBookSide {
     	 if(!bookEntries.containsKey(trd.getPrice()))
     	 {
     		 ArrayList<Tradable> newTradableList=new ArrayList<>();
-    		 newTradableList.add(trd);
     		 bookEntries.put(trd.getPrice(), newTradableList);
     	 }
-    	 else 
-    	 {
+    	 	ArrayList<Tradable> tradableList=bookEntries.get(trd.getPrice());
+    	 	tradableList.add(trd);
+   		 bookEntries.put(trd.getPrice(), tradableList);
+    	/*
     		 boolean find=false;
         	 Iterator<Entry<Price, ArrayList<Tradable>>> it = bookEntries.entrySet().iterator();
         	 ArrayList<Tradable> tradableList=null;
         	 while (!find&&it.hasNext())
         	 {
-        		 Entry<Price,ArrayList<Tradable>> entry=it.next();
+        		Entry<Price,ArrayList<Tradable>> entry=it.next();
         		Price priceInBookEntries =entry.getKey();
         		if(priceInBookEntries.equals(trd.getPrice()))
         			{
@@ -357,11 +358,11 @@ public class ProductBookSide {
         			
         			}	 
         	 }
-        	 
+        	 */
         	
     	 }
     	 
-     }
+     
     
      public HashMap<String, FillMessage> tryTrade(Tradable trd) throws NoSubscribeException, InvalidInputException, InvalidVolumeException
      {

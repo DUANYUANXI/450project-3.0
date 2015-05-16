@@ -166,6 +166,8 @@ public class Phase3Main {
 
         System.out.println("TS2.7) User " + u1.getUserName() + " enters a quote, REX & ANN receive Current Market updates for GOOG [120@$641.10 - 150@$641.15]: ");
         try {
+        	ProductService.getInstance().setMarketState("CLOSED");
+        	 ProductService.getInstance().setMarketState("PREOPEN");
             ProductService.getInstance().submitQuote(
                     new Quote(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.10"), 120, PriceFactory.makeLimitPrice("$641.15"), 150));
             System.out.println("Submitting a Quote was successful!");
