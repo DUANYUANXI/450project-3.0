@@ -261,15 +261,30 @@ public class ProductBook {
 		
 	}
 	public synchronized void updateCurrentMarket() throws NoSubscribeException {
-		
-		String s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+sellSide.topOfBookPrice().toString()+sellSide.topOfBookVolume();
-		if(lastMarketDataValue.equals(s))
+		MarketDataDTO mdto;
+		String s=null;
+		if(buySide.topOfBookPrice()==null)
 		{
+			if(lastMarketDataValue==s)
+			{
+				Price closedP=PriceFactory.makeLimitPrice(0);
+				 mdto=new MarketDataDTO(productSymbol,closedP,buySide.topOfBookVolume(),closedP,sellSide.topOfBookVolume());
+					CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
+					lastMarketDataValue=s;
+			}//?????
+		}
 		
-			MarketDataDTO mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());
+		 else 
+		 {
+			 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+sellSide.topOfBookPrice().toString()+sellSide.topOfBookVolume();
+			 if(lastMarketDataValue.equals(s))
+			 {
+		
+		 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());
 			CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
 			lastMarketDataValue=s;
-		}
+			 }
+			 	} 
 			
 	}
 	public void addOldEntry(Tradable t) throws InvalidVolumeException {

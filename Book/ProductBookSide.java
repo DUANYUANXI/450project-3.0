@@ -177,7 +177,7 @@ public class ProductBookSide {
      }
      public synchronized Price topOfBookPrice()
      {
-    	 if(bookEntries==null)
+    	 if(bookEntries==null||bookEntries.isEmpty())//
     		 return null;
     	 else 
     	 {
@@ -192,7 +192,7 @@ public class ProductBookSide {
      public synchronized int topOfBookVolume()
      {
     	 int sum=0;
-    	 if(bookEntries==null)
+    	 if(bookEntries==null||bookEntries.isEmpty())
     		 return 0;
     	 else 
     	 {

@@ -20,12 +20,13 @@ import tradable.TradableDTO;
 public final class ProductService {
 	
 	 private volatile static ProductService instance;
-	 private HashMap<String, ProductBook> allBooks = new HashMap< String, ProductBook >();
+	 private HashMap<String, ProductBook> allBooks; 
 	 private String currentMarketState; 
 		
 	 private ProductService(){
 		 
 		 currentMarketState="CLOSED";
+		 allBooks = new HashMap< String, ProductBook >();
 
 	 }
 	 public static ProductService getInstance()
