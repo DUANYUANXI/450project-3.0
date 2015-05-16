@@ -272,20 +272,19 @@ public class ProductBook {
 					CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
 					lastMarketDataValue=s;
 			}//?????
-		}
-		
-		 else 
-		 {
-			 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+sellSide.topOfBookPrice().toString()+sellSide.topOfBookVolume();
-			 if(lastMarketDataValue.equals(s))
-			 {
-		
-		 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());
-			CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
-			lastMarketDataValue=s;
-			 }
-			 	} 
+			}
 			
+			 else 
+			 {
+				 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+sellSide.topOfBookPrice().toString()+sellSide.topOfBookVolume();
+				 if(lastMarketDataValue.equals(s))
+				 {
+			
+			 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());
+				CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
+				lastMarketDataValue=s;
+				 }
+				 }
 	}
 	public void addOldEntry(Tradable t) throws InvalidVolumeException {
 		if(!oldEntries.containsKey(t.getPrice()))

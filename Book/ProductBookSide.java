@@ -388,15 +388,40 @@ public class ProductBookSide {
     		 
     	 }
     	 
-    	 allFills.putAll(fillMsgs);
+    	 //allFills.putAll(fillMsgs);
+    	 for(Entry<String, FillMessage> ee:fillMsgs.entrySet())
+    	 {
+    		 allFills.put(ee.getKey(), ee.getValue());
+    	 }
     	 return allFills;
 	}
 
-     private HashMap<String, FillMessage> mergeFills(
-			HashMap<String, FillMessage> fillMsgs,
-			HashMap<String, FillMessage> someMsgs) {
-		return null;
-	}
+     
+     private HashMap<String, FillMessage> mergeFills(HashMap<String, FillMessage> existing, HashMap<String,
+    		 FillMessage> newOnes) throws InvalidInputException
+    		 {
+    	 		if(existing.isEmpty())
+    	 			return new HashMap<String, FillMessage>(newOnes);
+    	 		else
+    	 		{
+    	 			HashMap<String, FillMessage> results = new HashMap<>(existing);
+    	 			for (String key : newOnes.keySet()) {
+    	 				if (!existing.containsKey(key))
+    	 					results.put(key, newOnes.get(key));
+    	 				else 
+    	 					{
+    	 					FillMessage fm = results.get(key);
+    	 					fm.setVolume(newOnes.get(key).getVolume());
+    	 					fm.setDetail(newOnes.get(key).getDetails());
+    	 					}
+    	 				
+    	 				
+    	 			}
+    	 			 return results;}
+    	 		
+    
+    		 }
+  
 
 	public  synchronized HashMap<String, FillMessage> trySellAgainstBuySideTrade(Tradable trd) throws InvalidInputException, InvalidVolumeException {
 		HashMap<String, FillMessage> allFills = new HashMap<String, FillMessage>();
@@ -408,7 +433,11 @@ public class ProductBookSide {
 			 HashMap<String, FillMessage> someMsgs=tradeProcessor.doTrade(trd);
 			 fillMsgs = mergeFills(fillMsgs, someMsgs);
 		 }
-		 allFills.putAll(fillMsgs);
+		 for(Entry<String, FillMessage> ee:fillMsgs.entrySet())
+    	 {
+    		 allFills.put(ee.getKey(), ee.getValue());
+    	 }
+		 //allFills.putAll(fillMsgs);
     	 return allFills;
 
 		

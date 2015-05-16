@@ -46,7 +46,7 @@ public final class ProductService {
 	 
 	 public synchronized String getMarketState()
 	 {
-		 return currentMarketState;
+	 return currentMarketState;
 		 
 	 }
 	 

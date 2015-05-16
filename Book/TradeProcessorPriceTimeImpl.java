@@ -64,7 +64,7 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 		for(int i=0;i<entriesAtPrice.size();i++)
 		{
 			
-			if (!(trd.getRemainingVolume()==0))
+			if (trd.getRemainingVolume()!=0)
 			{
 				if(trd.getRemainingVolume()>=entriesAtPrice.get(i).getRemainingVolume())
 				{
@@ -117,7 +117,7 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 			if(entriesAtPrice.contains(tradeOut.get(j)))
 				entriesAtPrice.remove(tradeOut.get(j));
 		}
-		if(!entriesAtPrice.isEmpty())
+		if(entriesAtPrice.isEmpty())
 
 		{
 			productBookSide.clearIfEmpty(productBookSide.topOfBookPrice());	
