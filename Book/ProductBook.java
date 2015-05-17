@@ -283,12 +283,24 @@ public class ProductBook {
 		}
 		else {
 				 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+sellSide.topOfBookPrice().toString()+sellSide.topOfBookVolume();
+				 if(lastMarketDataValue==null){
 				 if(!(lastMarketDataValue==s))
 				 {
 			
 			 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());
 				CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
 				lastMarketDataValue=s;
+				 }}
+				 if(lastMarketDataValue!=null)
+				 {
+					 if(!(lastMarketDataValue.equals(s)))
+					 {
+						 
+				 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());
+					CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
+					lastMarketDataValue=s;
+					 }
+					 
 				 }
 				 }
 	}

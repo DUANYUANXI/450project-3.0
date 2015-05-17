@@ -223,6 +223,7 @@ public class Phase3Main {
 
         System.out.println("TS3.1) Change Market State to Closed then PreOpen the Market State. Rex & ANN should receive one market message for each state");
         try {
+        	 ProductService.getInstance().setMarketState("OPEN");
             ProductService.getInstance().setMarketState("CLOSED");
             ProductService.getInstance().setMarketState("PREOPEN");
         } catch (Exception ex) {

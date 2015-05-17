@@ -183,7 +183,7 @@ public class ProductBookSide {
     	 {
     		 ArrayList<Price> sorted = new ArrayList<Price>(bookEntries.keySet()); // Get prices
  			Collections.sort(sorted); // Sort them
- 			if (side.equals("BUY")) 
+ 			if (side.equals("SELL")) 
  				Collections.reverse(sorted); // Reverse them
  			return sorted.get(0);
  					
@@ -199,7 +199,7 @@ public class ProductBookSide {
     		 
     		 ArrayList<Price> sorted = new ArrayList<Price>(bookEntries.keySet()); // Get prices
  			Collections.sort(sorted); // Sort them
- 			if (side.equals("BUY")) 
+ 			if (side.equals("SELL")) 
  				Collections.reverse(sorted); // Reverse them
  			ArrayList<Tradable> tradableList=bookEntries.get(sorted.get(0));
  			for(int i=0;i<tradableList.size();i++)
@@ -465,9 +465,7 @@ public class ProductBookSide {
 			clearIfEmpty(t.getPrice());
 	}
 	
-	/*public ProductBook getParent(){
-		return productBookParent;
-	}*/
+
 }
 	
 	
