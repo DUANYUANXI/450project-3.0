@@ -89,27 +89,27 @@ public class ProductBookSide {
 			
 		}
      public synchronized String[] getBookDepth()
-     {
+     {String[] stringArray;
     	 
     	 if(bookEntries.isEmpty())
     		return new String[]{"<Empty>"};
     	 else 
     	 {
-    		 String[] stringArray=new String[bookEntries.size()];
+    	stringArray=new String[bookEntries.size()];
     		 int stringArraySize=0;
     		 ArrayList<Price> sorted = new ArrayList<Price>(bookEntries.keySet()); // Get prices
  			Collections.sort(sorted); // Sort them
- 			if (side.equals("BUY")) 
+ 			if (side.equals("SELL")) 
  				Collections.reverse(sorted); // Reverse them
  			for(int i=0;i<sorted.size();i++){
  				int sum=0;
  				ArrayList<Tradable> tradableList=bookEntries.get(sorted.get(i));
  				for(int j=0;j<tradableList.size();j++)
  						{
- 							sum=sum+tradableList.get(i).getRemainingVolume();
- 							String priceVolume=sorted.toString()+"*"+sum;
- 							if(stringArraySize<=bookEntries.size())
- 							{
+ 							sum=sum+tradableList.get(j).getRemainingVolume();
+ 							String priceVolume=sorted.get(i).toString()+"*"+sum;
+ 							if(stringArraySize<bookEntries.size())
+ 							
  								stringArray[stringArraySize]=priceVolume;
  								stringArraySize++;
  							}
@@ -121,7 +121,7 @@ public class ProductBookSide {
  			
  					}
     		 
-    	 }
+    	 
      
     	
      
