@@ -13,7 +13,7 @@ import tradable.Tradable;
 public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 
 
-	private HashMap<String, FillMessage> fillMessages; 
+	private HashMap<String, FillMessage> fillMessages= new HashMap<String, FillMessage>();; 
 	private ProductBookSide productBookSide;
 	
 	public TradeProcessorPriceTimeImpl(ProductBookSide productBookSideIn)
@@ -58,7 +58,7 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 	
 	public HashMap<String, FillMessage> doTrade(Tradable trd) throws InvalidInputException, InvalidVolumeException
 	{
-		fillMessages= new HashMap<String, FillMessage>();
+		
 		ArrayList<Tradable> tradeOut=new ArrayList<Tradable>();
 		ArrayList<Tradable> entriesAtPrice=productBookSide.getEntriesAtTopOfBook();
 		for(int i=0;i<entriesAtPrice.size();i++)
@@ -84,6 +84,8 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 					addFillMessage(trdfm);
 					trd.setRemainingVolume(trd.getRemainingVolume()-entriesAtPrice.get(i).getRemainingVolume());
 					entriesAtPrice.get(i).setRemainingVolume(0);
+					entriesAtPrice.remove(i);
+					//productBookSide.removeTradable(entriesAtPrice.get(i));
 					productBookSide.addOldEntry(entriesAtPrice.get(i));
 					
 				}

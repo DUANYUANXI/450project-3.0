@@ -63,7 +63,7 @@ public class FillMessage implements Message,Comparable<FillMessage> {
 		public String toString()
 		{
 			String output="User:"+getUser()+", Product:"+getProduct()+", price:"+getPrice().toString()+", Volume:"
-					+getVolume()+", Details: Filled By User, Side:"+getSide();
+					+getVolume()+", Details:"+getDetails() +", Side:"+getSide();
 			return output;
 		}
 public void setVolume(int volume) throws InvalidInputException

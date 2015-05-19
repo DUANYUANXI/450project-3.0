@@ -111,8 +111,8 @@ public class ProductBookSide {
  							if(stringArraySize<bookEntries.size())
  							
  								stringArray[stringArraySize]=priceVolume;
- 								stringArraySize++;
- 							}
+ 								
+ 							}stringArraySize++;
  						}
  						
  				}
@@ -134,14 +134,14 @@ public class ProductBookSide {
     	 {
     		 Entry<Price,ArrayList<Tradable>> entry=it.next();
     		Price priceInBookEntries =entry.getKey();
-    		if(priceInBookEntries.compareTo(price)==0)
+    		if(priceInBookEntries.equals(price))
     			{
     			find=true;
     			returnArray= entry.getValue();
     			}	 
     	 }
     	 
-    	 if(find==true)
+    	 if(find==false)
     		 returnArray=null;
     	 return returnArray;
      }
@@ -401,8 +401,19 @@ public class ProductBookSide {
      private HashMap<String, FillMessage> mergeFills(HashMap<String, FillMessage> existing, HashMap<String,
     		 FillMessage> newOnes) throws InvalidInputException
     		 {
+    	 		HashMap<String,FillMessage> mergedFills=new HashMap<>(); 
     	 		if(existing.isEmpty())
-    	 			return new HashMap<String, FillMessage>(newOnes);
+    	 		{
+    	 			for(Entry<String,FillMessage > ee:newOnes.entrySet())
+    	 			{
+    	 				mergedFills.put(ee.getKey(), ee.getValue());
+    	 			}
+    	 			return mergedFills;
+    	 		}
+    	 		
+    	 		
+    	 	
+    	 			//return new HashMap<String, FillMessage>(newOnes);
     	 		else
     	 		{
     	 			HashMap<String, FillMessage> results = new HashMap<>(existing);

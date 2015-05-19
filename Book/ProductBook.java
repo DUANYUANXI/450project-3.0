@@ -132,6 +132,7 @@ public class ProductBook {
 				ArrayList<Tradable> topOfBuySide=buySide.getEntriesAtPrice(tbp);
 				HashMap<String, FillMessage> allFills=null;
 				ArrayList<Tradable> toRemove=new ArrayList<>();
+			
 				for(int i=0;i<topOfBuySide.size();i++)
 				{
 					allFills=sellSide.tryTrade(topOfBuySide.get(i));
@@ -139,24 +140,28 @@ public class ProductBook {
 						toRemove.add(topOfBuySide.get(i));
 						
 				}
+				String s=topOfBuySide.get(0).getProduct();
 				for(int j=0;j<toRemove.size();j++)
 				{
 					buySide.removeTradable(toRemove.get(j));
 				}
 				updateCurrentMarket();
-				
+					
 				Price lastSalePrice=determineLastSalePrice(allFills);
 				int lastSaleVolume=determineLastSaleQuantity(allFills);
-				LastSalePublisher.getInstance().publishLastSale(topOfBuySide.get(0).getProduct(), lastSalePrice, lastSaleVolume);
-				Price buyPrice=buySide.topOfBookPrice();
+			
+				LastSalePublisher.getInstance().publishLastSale(s, lastSalePrice, lastSaleVolume);
+				//topOfBuySide=buySide.getEntriesAtPrice(tbp);
+				Price buyPrice=sellSide.topOfBookPrice();
 				Price sellPrice=sellSide.topOfBookPrice();
 				if(buyPrice==null||sellPrice==null)
 					break;
 				
+				}
 				
 			}
 		}
-	}
+	
 	public synchronized void closeMarket() throws InvalidInputException, NoSubscribeException, OrderNotFoundException, InvalidVolumeException
 	{
 		sellSide.cancelAll();

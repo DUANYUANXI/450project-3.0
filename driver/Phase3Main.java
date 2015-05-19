@@ -158,7 +158,7 @@ public class Phase3Main {
         System.out.println("TS2.6) Change Market State to Open and verify the Market State");
         try {
             ProductService.getInstance().setMarketState("OPEN");
-            System.out.println("Product State: " + ProductService.getInstance().getMarketState());
+           System.out.println("Product State: " + ProductService.getInstance().getMarketState());
         } catch (Exception ex) {
             System.out.println("Set market State caused an unexpected exception: " + ex.getMessage());
         }
@@ -167,7 +167,7 @@ public class Phase3Main {
         System.out.println("TS2.7) User " + u1.getUserName() + " enters a quote, REX & ANN receive Current Market updates for GOOG [120@$641.10 - 150@$641.15]: ");
         try {
         	ProductService.getInstance().setMarketState("CLOSED");
-        	 ProductService.getInstance().setMarketState("PREOPEN");
+        	ProductService.getInstance().setMarketState("PREOPEN");
             ProductService.getInstance().submitQuote(
                     new Quote(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.10"), 120, PriceFactory.makeLimitPrice("$641.15"), 150));
             System.out.println("Submitting a Quote was successful!");
