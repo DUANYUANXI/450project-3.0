@@ -13,7 +13,7 @@ import tradable.Tradable;
 public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 
 
-	private HashMap<String, FillMessage> fillMessages= new HashMap<String, FillMessage>();; 
+	private HashMap<String, FillMessage> fillMessages; 
 	private ProductBookSide productBookSide;
 	
 	public TradeProcessorPriceTimeImpl(ProductBookSide productBookSideIn)
@@ -58,34 +58,48 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 	
 	public HashMap<String, FillMessage> doTrade(Tradable trd) throws InvalidInputException, InvalidVolumeException
 	{
-		
+		fillMessages= new HashMap<String, FillMessage>(); 
 		ArrayList<Tradable> tradeOut=new ArrayList<Tradable>();
 		ArrayList<Tradable> entriesAtPrice=productBookSide.getEntriesAtTopOfBook();
+		Price tPrice;
 		for(int i=0;i<entriesAtPrice.size();i++)
 		{
 			
-			if (trd.getRemainingVolume()!=0)
+			if(trd.getRemainingVolume()==0)
+			{
+				for(Tradable x :tradeOut)
+				{
+				
+					entriesAtPrice.remove(x);	
+				}
+				if(entriesAtPrice.isEmpty())
+				{
+					productBookSide.clearIfEmpty(productBookSide.topOfBookPrice());
+				}
+				return fillMessages;
+			}
+			else if(trd.getRemainingVolume()!=0)
 			{
 				if(trd.getRemainingVolume()>=entriesAtPrice.get(i).getRemainingVolume())
 				{
 					tradeOut.add(entriesAtPrice.get(i));
 					if(entriesAtPrice.get(i).getPrice().isMarket())
-						entriesAtPrice.get(i).setPrice(trd.getPrice());//????
-					else entriesAtPrice.get(i).setPrice(entriesAtPrice.get(i).getPrice());//??
-					/*FillMessage(String user, String product,Price price,
-				 int rmainingVolume,String details,String side, String id)*/
+						tPrice=trd.getPrice();//????
+					else tPrice=entriesAtPrice.get(i).getPrice();//??
+				
 					FillMessage tfm=new FillMessage(entriesAtPrice.get(i).getUser(),entriesAtPrice.get(i).getProduct(),
-							entriesAtPrice.get(i).getPrice(),entriesAtPrice.get(i).getRemainingVolume(),"Leaving 0",entriesAtPrice.get(i).
+							tPrice,entriesAtPrice.get(i).getRemainingVolume(),"Leaving 0",entriesAtPrice.get(i).
 							getSide(),entriesAtPrice.get(i).getId());
 					addFillMessage(tfm);
 					FillMessage trdfm=new FillMessage(trd.getUser(),trd.getProduct(),
-							entriesAtPrice.get(i).getPrice(),entriesAtPrice.get(i).getRemainingVolume(),"Leaving"+(trd.getRemainingVolume()-entriesAtPrice.get(i).getRemainingVolume()),trd.
+							tPrice,entriesAtPrice.get(i).getRemainingVolume(),"Leaving"+(trd.getRemainingVolume()-entriesAtPrice.get(i).getRemainingVolume()),trd.
 							getSide(),trd.getId());
 					addFillMessage(trdfm);
 					trd.setRemainingVolume(trd.getRemainingVolume()-entriesAtPrice.get(i).getRemainingVolume());
 					entriesAtPrice.get(i).setRemainingVolume(0);
+					productBookSide.removeTradable(entriesAtPrice.get(i));
 					entriesAtPrice.remove(i);
-					//productBookSide.removeTradable(entriesAtPrice.get(i));
+					
 					productBookSide.addOldEntry(entriesAtPrice.get(i));
 					
 				}
@@ -93,14 +107,14 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 				{
 					int remainder=entriesAtPrice.get(i).getRemainingVolume()-trd.getRemainingVolume();
 					if(entriesAtPrice.get(i).getPrice().isMarket())
-						entriesAtPrice.get(i).setPrice(trd.getPrice());//???
-					else entriesAtPrice.get(i).setPrice(entriesAtPrice.get(i).getPrice());//??
+						tPrice=trd.getPrice();//???
+					else tPrice=entriesAtPrice.get(i).getPrice();//??
 					FillMessage tfm=new FillMessage(entriesAtPrice.get(i).getUser(),entriesAtPrice.get(i).getProduct(),
-							entriesAtPrice.get(i).getPrice(),trd.getRemainingVolume(),"Leaving"+remainder,entriesAtPrice.get(i).
+							tPrice,trd.getRemainingVolume(),"Leaving"+remainder,entriesAtPrice.get(i).
 							getSide(),entriesAtPrice.get(i).getId());
 					addFillMessage(tfm);
 					FillMessage trdfm=new FillMessage(trd.getUser(),trd.getProduct(),
-							entriesAtPrice.get(i).getPrice(),trd.getRemainingVolume(),"Leaving 0",trd.
+					tPrice,trd.getRemainingVolume(),"Leaving 0",trd.
 							getSide(),trd.getId());
 					addFillMessage(trdfm);
 					trd.setRemainingVolume(0);
@@ -109,6 +123,8 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 						
 					
 				}
+				
+				
 			}
 		}
 		

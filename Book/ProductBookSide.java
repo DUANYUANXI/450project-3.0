@@ -438,7 +438,7 @@ public class ProductBookSide {
 	public  synchronized HashMap<String, FillMessage> trySellAgainstBuySideTrade(Tradable trd) throws InvalidInputException, InvalidVolumeException {
 		HashMap<String, FillMessage> allFills = new HashMap<String, FillMessage>();
 		HashMap<String, FillMessage> fillMsgs = new HashMap<String, FillMessage>();
-		 while((trd.getRemainingVolume()>0&&!bookEntries.isEmpty()&&trd.getPrice().getValue()>=topOfBookPrice().getValue())||
+		 while((trd.getRemainingVolume()>0&&!bookEntries.isEmpty()&&trd.getPrice().getValue()<=topOfBookPrice().getValue())||
     			 (trd.getRemainingVolume()>0&&!bookEntries.isEmpty()&&trd.getPrice().isMarket()))
 			 
 		 {

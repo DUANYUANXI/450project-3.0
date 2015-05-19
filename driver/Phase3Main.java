@@ -166,8 +166,8 @@ public class Phase3Main {
 
         System.out.println("TS2.7) User " + u1.getUserName() + " enters a quote, REX & ANN receive Current Market updates for GOOG [120@$641.10 - 150@$641.15]: ");
         try {
-        	ProductService.getInstance().setMarketState("CLOSED");
-        	ProductService.getInstance().setMarketState("PREOPEN");
+        	//ProductService.getInstance().setMarketState("CLOSED");
+        	//ProductService.getInstance().setMarketState("PREOPEN");
             ProductService.getInstance().submitQuote(
                     new Quote(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.10"), 120, PriceFactory.makeLimitPrice("$641.15"), 150));
             System.out.println("Submitting a Quote was successful!");
@@ -223,7 +223,7 @@ public class Phase3Main {
 
         System.out.println("TS3.1) Change Market State to Closed then PreOpen the Market State. Rex & ANN should receive one market message for each state");
         try {
-        	 ProductService.getInstance().setMarketState("OPEN");
+        	// ProductService.getInstance().setMarketState("OPEN");
             ProductService.getInstance().setMarketState("CLOSED");
             ProductService.getInstance().setMarketState("PREOPEN");
         } catch (Exception ex) {
@@ -264,10 +264,11 @@ public class Phase3Main {
         }
         System.out.println();
 
-        System.out.println("TS3.5) User " + u2.getUserName() + " enters several Sell orders - no Current Market received - none of the orders improves the market: ");
+       System.out.println("TS3.5) User " + u2.getUserName() + " enters several Sell orders - no Current Market received - none of the orders improves the market: ");
         try {
             ProductService.getInstance().submitOrder(
                     new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.16"), 111, "SELL"));
+           
             ProductService.getInstance().submitOrder(
                     new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.17"), 222, "SELL"));
             ProductService.getInstance().submitOrder(

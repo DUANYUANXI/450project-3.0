@@ -13,7 +13,10 @@ public class PriceFactory {
 	private static Price mkt=new MarketPrice();
 	public static Price makeLimitPrice(String value)
 	{
-		long valueln=(long)((Double.parseDouble(value.replaceAll("[$,]","")))*100.0);
+		Double d=Double.parseDouble(value.replaceAll("[$,]",""))*100.00;
+		long valueln=Math.round(d);
+		
+		//long valueln=(long)((Double.parseDouble(value.replaceAll("[$,]","")))*100.00);
 		Price p=addToHashTable(valueln);
 		return p;
 	}

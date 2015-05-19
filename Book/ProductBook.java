@@ -123,16 +123,18 @@ public class ProductBook {
 	{
 		Price tbp=buySide.topOfBookPrice();
 		Price tsp=sellSide.topOfBookPrice();
-		if(tbp!=null&&tsp!=null)
+		if(tbp==null||tsp==null) return;
+		else if(tbp!=null&&tsp!=null)
 		{
 			//WHILE (the buyPrice is greater than or equal to the sell price OR the buyPrice is a MKT price OR the
 					//sellPrice is MKT):
-			while(tbp.getValue()>=tsp.getValue()||tbp.isMarket()||tsp.isMarket())
+			
+			while((tbp.getValue()>=tsp.getValue()||tbp.isMarket()||tsp.isMarket()))
 			{
 				ArrayList<Tradable> topOfBuySide=buySide.getEntriesAtPrice(tbp);
 				HashMap<String, FillMessage> allFills=null;
 				ArrayList<Tradable> toRemove=new ArrayList<>();
-			
+				String s=topOfBuySide.get(0).getProduct();
 				for(int i=0;i<topOfBuySide.size();i++)
 				{
 					allFills=sellSide.tryTrade(topOfBuySide.get(i));
@@ -140,16 +142,15 @@ public class ProductBook {
 						toRemove.add(topOfBuySide.get(i));
 						
 				}
-				String s=topOfBuySide.get(0).getProduct();
 				for(int j=0;j<toRemove.size();j++)
 				{
 					buySide.removeTradable(toRemove.get(j));
 				}
 				updateCurrentMarket();
-					
-				Price lastSalePrice=determineLastSalePrice(allFills);
-				int lastSaleVolume=determineLastSaleQuantity(allFills);
 			
+			
+				Price lastSalePrice=determineLastSalePrice(allFills);
+				int lastSaleVolume=determineLastSaleQuantity(allFills);	
 				LastSalePublisher.getInstance().publishLastSale(s, lastSalePrice, lastSaleVolume);
 				//topOfBuySide=buySide.getEntriesAtPrice(tbp);
 				Price buyPrice=sellSide.topOfBookPrice();
@@ -205,21 +206,21 @@ public class ProductBook {
 		userQuotes.add(q.getUserName());
 		updateCurrentMarket();
 	}
-	private synchronized void addToBook(String side, Tradable trd) throws NoSubscribeException, InvalidInputException, InvalidVolumeException {
+	private synchronized void addToBook(String sideIn, Tradable trd) throws NoSubscribeException, InvalidInputException, InvalidVolumeException {
 		
 			if(ProductService.getInstance().getMarketState().equals("PREOPEN"))
 			{
-				if(side.equals("BUY"))
+				if(sideIn.equals("BUY"))
 					buySide.addToBook(trd);
-				else if(side.equals("SELL"))
+				else if(sideIn.equals("SELL"))
 					sellSide.addToBook(trd);
 				return;
 			}
 			
 			HashMap<String, FillMessage> allFills = null;
-			if(side.equals("BUY"))
+			if(sideIn.equals("BUY"))
 				allFills=sellSide.tryTrade(trd);
-			else if (side.equals("SELL"))
+			else if (sideIn.equals("SELL"))
 				allFills=buySide.tryTrade(trd);
 			if(!allFills.isEmpty()&&allFills!=null)
 			{
@@ -240,9 +241,9 @@ public class ProductBook {
 				}
 				else
 				{
-					if(side.equals("BUY"))
+					if(sideIn.equals("BUY"))
 						buySide.addToBook(trd);
-					else if(side.equals("SELL"))
+					else if(sideIn.equals("SELL"))
 						sellSide.addToBook(trd);
 				}
 			}
