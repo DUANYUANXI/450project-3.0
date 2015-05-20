@@ -80,7 +80,7 @@ public final class ProductService {
 		 {
 			 currentMarketState=ms; 
 			 MarketMessage msm=new MarketMessage(currentMarketState);
-			 MessagePublisher.getInstance().publishMarketMessage(msm);
+ 			 MessagePublisher.getInstance().publishMarketMessage(msm);
 			 if(currentMarketState.equals("OPEN"))
 			 {
 				 for(Entry<String, ProductBook> ee:allBooks.entrySet())

@@ -278,7 +278,7 @@ public class ProductBook {
 			{
 				Price closedP=PriceFactory.makeLimitPrice(0);
 				 mdto=new MarketDataDTO(productSymbol,closedP,buySide.topOfBookVolume(),closedP,sellSide.topOfBookVolume());
-					CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
+					//CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
 					lastMarketDataValue=s;
 			}//?????
 			if(lastMarketDataValue!=s)
