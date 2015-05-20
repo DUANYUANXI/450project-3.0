@@ -269,7 +269,7 @@ public class ProductBook {
 		
 	}
 	public synchronized void updateCurrentMarket() throws NoSubscribeException {
-		MarketDataDTO mdto;
+		MarketDataDTO mdto = null;
 		String s=null;
 		if(buySide.topOfBookPrice()==null)
 		{
@@ -289,8 +289,22 @@ public class ProductBook {
 			}
 		}
 		else {
+			if(sellSide.topOfBookPrice()==null){
+				//String s1=buySide.topOfBookPrice().toString();
+				//int s2=buySide.topOfBookVolume();
+				//Price p=sellSide.topOfBookPrice();
+				//String s3=p.toString();
+				//int s4=sellSide.topOfBookVolume();
+				
+				//Price p=PriceFactory.makeLimitPrice("0");
+				 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+"$0.00"+"0";
+				// s=s1+s2+s3+s4;
+				 }
+			else if(sellSide.topOfBookPrice()!=null)
+			{
 				 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+sellSide.topOfBookPrice().toString()+sellSide.topOfBookVolume();
-				 if(lastMarketDataValue==null){
+			}
+				if(lastMarketDataValue==null){
 				 if(!(lastMarketDataValue==s))
 				 {
 			
@@ -303,7 +317,11 @@ public class ProductBook {
 					 if(!(lastMarketDataValue.equals(s)))
 					 {
 						 
-				 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());
+						 if(sellSide.topOfBookPrice()==null){
+							 Price cp=PriceFactory.makeLimitPrice("0");
+							 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),cp,0);}
+						 else if(sellSide.topOfBookPrice()!=null){
+				 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());}
 					CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
 					lastMarketDataValue=s;
 					 }

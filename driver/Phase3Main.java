@@ -664,23 +664,27 @@ Sell Side:
 	$641.20 x 555
 
 TS3.10) User REX enters a big MKT BUY order to trade with all the SELL side:
-        ANN receives 6 Fill Messages, a Current Market, a Last Sale & a Ticker
-        REX receives 1 Fill Message, a Current Market, a Last Sale & a Ticker, and a cancel for the 40 remaining MKT order quantity not traded
+ANN receives 6 Fill Messages, a Current Market, a Last Sale & a Ticker
+REX receives 6 Fill Messages, a Current Market, a Last Sale & a Ticker, and a cancel for the 40 remaining MKT order quantity not traded
+User REX Received Fill Message: User: REX, Product: GOOG, Fill Price: $641.20, Fill Volume: 555, Details: leaving 40, Side: BUY
 User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.16, Fill Volume: 111, Details: leaving 0, Side: SELL
-User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.19, Fill Volume: 444, Details: leaving 0, Side: SELL
-User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.17, Fill Volume: 222, Details: leaving 0, Side: SELL
-User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.18, Fill Volume: 333, Details: leaving 0, Side: SELL
-User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.15, Fill Volume: 45, Details: leaving 0, Side: SELL
-User REX Received Fill Message: User: REX, Product: GOOG, Fill Price: $641.15, Fill Volume: 1710, Details: leaving 40, Side: BUY
 User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.20, Fill Volume: 555, Details: leaving 0, Side: SELL
+User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.15, Fill Volume: 45, Details: leaving 0, Side: SELL
+User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.17, Fill Volume: 222, Details: leaving 0, Side: SELL
+User REX Received Fill Message: User: REX, Product: GOOG, Fill Price: $641.16, Fill Volume: 111, Details: leaving 1594, Side: BUY
+User REX Received Fill Message: User: REX, Product: GOOG, Fill Price: $641.17, Fill Volume: 222, Details: leaving 1372, Side: BUY
+User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.19, Fill Volume: 444, Details: leaving 0, Side: SELL
+User ANN Received Fill Message: User: ANN, Product: GOOG, Fill Price: $641.18, Fill Volume: 333, Details: leaving 0, Side: SELL
+User REX Received Fill Message: User: REX, Product: GOOG, Fill Price: $641.15, Fill Volume: 45, Details: leaving 1705, Side: BUY
+User REX Received Fill Message: User: REX, Product: GOOG, Fill Price: $641.18, Fill Volume: 333, Details: leaving 1039, Side: BUY
+User REX Received Fill Message: User: REX, Product: GOOG, Fill Price: $641.19, Fill Volume: 444, Details: leaving 595, Side: BUY
 User REX Received Current Market for GOOG 555@$641.14 - 0@$0.00
 User ANN Received Current Market for GOOG 555@$641.14 - 0@$0.00
 User REX Received Last Sale for GOOG 1710@$641.20
 User ANN Received Last Sale for GOOG 1710@$641.20
-User REX Received Ticker for GOOG $641.20 鈫�
-User ANN Received Ticker for GOOG $641.20 鈫�
+User REX Received Ticker for GOOG $641.20 ↑
+User ANN Received Ticker for GOOG $641.20 ↑
 User REX Received Cancel Message: User: REX, Price: MKT, Volume: 40, Details: Cancelled, Side: BUY
-
 TS3.11) Verify Resulting Book [should be 5 buy-side entries, NO sell-side entries]: 
 Buy Side:
 	$641.14 x 555
