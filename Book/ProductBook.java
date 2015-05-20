@@ -238,7 +238,7 @@ public class ProductBook {
 				{
 					 
     				 CancelMessage cancelMessage=new CancelMessage(trd.getUser(),trd.getProduct(),trd.getPrice(),
-    						 trd.getCancelledVolume(),"CANCELLED",trd.getSide(),trd.getId());
+    						 trd.getRemainingVolume(),"CANCELLED",trd.getSide(),trd.getId());
     				 MessagePublisher.getInstance().publishCancel(cancelMessage);
 				}
 				else
@@ -309,8 +309,12 @@ public class ProductBook {
 				 if(!(lastMarketDataValue==s))
 				 {
 			
+					 if(sellSide.topOfBookPrice()!=null)
 			 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());
-				CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
+				
+					 else if(sellSide.topOfBookPrice()==null)
+						 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),PriceFactory.makeLimitPrice("0"),0);
+						 CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
 				lastMarketDataValue=s;
 				 }}
 				 if(lastMarketDataValue!=null)

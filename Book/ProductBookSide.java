@@ -222,14 +222,11 @@ public class ProductBookSide {
      
      public synchronized void cancelAll() throws InvalidInputException, NoSubscribeException, OrderNotFoundException, InvalidVolumeException
      {
-    	 
-    	// Iterator<Entry<Price, ArrayList<Tradable>>> it = bookEntries.entrySet().iterator();
-    	 //while (it.hasNext())
-    	 //Iterator<Map.Entry<String, String>> it = map.entrySet().iterator(); it.hasNext(); 
-    	 //for( Entry<Price,ArrayList<Tradable>> entry:bookEntries.entrySet())
-    		 for(Iterator<Entry<Price, ArrayList<Tradable>>> it = bookEntries.entrySet().iterator(); it.hasNext(); )
+    	
+    	 while(bookEntries.size()!=0)
+    		 //for(Iterator<Entry<Price, ArrayList<Tradable>>> it = bookEntries.entrySet().iterator(); it.hasNext(); )
     	 {
-    		 
+    			 Iterator<Entry<Price, ArrayList<Tradable>>> it = bookEntries.entrySet().iterator();
     		 Entry<Price,ArrayList<Tradable>> entry=it.next();
     		 ArrayList<Tradable> tradableList=entry.getValue();
  
@@ -304,7 +301,7 @@ public class ProductBookSide {
     				 tradableList.remove(countTradableList); 
     				 String cancelDetail=tradableObject.getSide()+" SIDE ORDER CANCELLED";
     				 CancelMessage cancelMessage=new CancelMessage(tradableObject.getUser(),tradableObject.getProduct(),tradableObject.getPrice(),
-    						 tradableObject.getCancelledVolume(),cancelDetail,tradableObject.getSide(),tradableObject.getId());
+    						 tradableObject.getRemainingVolume(),cancelDetail,tradableObject.getSide(),tradableObject.getId());
     				 MessagePublisher.getInstance().publishCancel(cancelMessage);
     				 addOldEntry(tradableObject);
     				 //????volume which volume?????
@@ -336,7 +333,7 @@ public class ProductBookSide {
     	{
     		String cancelDetail=side+" SIDE QUOTE CANCELLED";
     		 CancelMessage cancelMessage=new CancelMessage(tradableObject.user,tradableObject.product,tradableObject.price,
-					 tradableObject.cancelledVolume,cancelDetail,tradableObject.side,tradableObject.id);
+					 tradableObject.remainingVolume,cancelDetail,tradableObject.side,tradableObject.id);
 			 MessagePublisher.getInstance().publishCancel(cancelMessage);
     	}
   
