@@ -97,8 +97,8 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 					addFillMessage(trdfm);
 					trd.setRemainingVolume(trd.getRemainingVolume()-entriesAtPrice.get(i).getRemainingVolume());
 					entriesAtPrice.get(i).setRemainingVolume(0);
-					productBookSide.removeTradable(entriesAtPrice.get(i));
-					entriesAtPrice.remove(i);
+					//productBookSide.removeTradable(entriesAtPrice.get(i));
+					//entriesAtPrice.remove(i);
 					
 					productBookSide.addOldEntry(entriesAtPrice.get(i));
 					
