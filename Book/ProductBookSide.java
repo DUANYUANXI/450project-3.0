@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
+
 import message.CancelMessage;
 import message.FillMessage;
 import message.InvalidInputException;
@@ -220,18 +222,31 @@ public class ProductBookSide {
      
      public synchronized void cancelAll() throws InvalidInputException, NoSubscribeException, OrderNotFoundException, InvalidVolumeException
      {
-    	
-    	 for(Entry<Price, ArrayList<Tradable>> ee : bookEntries.entrySet())
+    	 
+    	// Iterator<Entry<Price, ArrayList<Tradable>>> it = bookEntries.entrySet().iterator();
+    	 //while (it.hasNext())
+    	 //Iterator<Map.Entry<String, String>> it = map.entrySet().iterator(); it.hasNext(); 
+    	 //for( Entry<Price,ArrayList<Tradable>> entry:bookEntries.entrySet())
+    		 for(Iterator<Entry<Price, ArrayList<Tradable>>> it = bookEntries.entrySet().iterator(); it.hasNext(); )
     	 {
-    		 ArrayList<Tradable> tradableList=ee.getValue();
-    		 for(int i=0;i<tradableList.size();i++)
-    		 {
-    			 submitOrderCancel(tradableList.get(i).getId());
-    			 submitQuoteCancel(tradableList.get(i).getUser());
+    		 
+    		 Entry<Price,ArrayList<Tradable>> entry=it.next();
+    		 ArrayList<Tradable> tradableList=entry.getValue();
+ 
+    		 while(tradableList.size()!=0)
+    		 { 
+    			 if(!tradableList.get(0).isQuote())
+    				 submitOrderCancel(tradableList.get(0).getId());	
+    			 else if(tradableList.get(0).isQuote())
+    			 submitQuoteCancel(tradableList.get(0).getUser());
+    			
+    			 }
+    			
     		 }
+    	
     	 }
     	 
-     }
+     
      
      
      public synchronized TradableDTO removeQuote(String user){
@@ -249,7 +264,8 @@ public class ProductBookSide {
     		 while(!find&&countTradableList<tradableListOriginialSize)
     		 {
     			 if(tradableList.get(countTradableList).isQuote()&&tradableList.get(countTradableList).getUser().equals(user))
-    			 {	
+    			 {		
+    				 find=true;
     				 Tradable tradableObject=tradableList.get(countTradableList);
     				//String productln,Price priceln,int originalVolumeln,int remainingVolumeln,int cancelledVolumeln, String userln,String sideln,boolean isQuoteln, String idln
 			    		dto=new TradableDTO(tradableObject.getProduct(), tradableObject.getPrice(),
@@ -259,7 +275,7 @@ public class ProductBookSide {
     				 tradableList.remove(countTradableList);
     				 if(tradableList.size()==0)
     					bookEntries.remove(entry.getKey());
-    				 find=true;
+    			
     			 }
     			 countTradableList++; 
     		 }
@@ -283,31 +299,34 @@ public class ProductBookSide {
     		 {
     			 Tradable tradableObject=tradableList.get(countTradableList);
     			 if(!tradableObject.isQuote()&&tradableObject.getId().equals(orderId))
-    			 {
-    				 addOldEntry(tradableObject);
-    				 //????volume which volume?????
-    				 tradableList.remove(countTradableList);
-    				 
-    				// CancelMessage(String user, String product,Price price,
-    						 //int volume,String details,String side, String id)
+    			 {	
+    				 find=true;
+    				 tradableList.remove(countTradableList); 
     				 String cancelDetail=tradableObject.getSide()+" SIDE ORDER CANCELLED";
     				 CancelMessage cancelMessage=new CancelMessage(tradableObject.getUser(),tradableObject.getProduct(),tradableObject.getPrice(),
     						 tradableObject.getCancelledVolume(),cancelDetail,tradableObject.getSide(),tradableObject.getId());
     				 MessagePublisher.getInstance().publishCancel(cancelMessage);
-    				 
+    				 addOldEntry(tradableObject);
+    				 //????volume which volume?????
+    				if(tradableList.size()==0)
+    					
+    				 bookEntries.remove(entry.getKey());
+    				// CancelMessage(String user, String product,Price price,
+    						 //int volume,String details,String side, String id)
     				 
     			 }
     				 countTradableList++; 
-    		}
-    		 if(tradableList.isEmpty())
-    		 bookEntries.remove(entry.getKey());
+    				 
+    		}}
+    		// if(tradableList.isEmpty())
+    		// bookEntries.remove(entry.getKey());
     		 if(!find)
     		 {
     			 productBookParent.checkTooLateToCancel(orderId); 
     		 }
     		
     		
-    		 }
+    		 
      }
      
      public synchronized void submitQuoteCancel(String userName) throws InvalidInputException, NoSubscribeException

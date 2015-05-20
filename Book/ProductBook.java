@@ -88,6 +88,7 @@ public class ProductBook {
     				 CancelMessage cancelMessage=new CancelMessage(tradableList.get(count).getUser(),tradableList.get(count).getProduct(),tradableList.get(count).getPrice(),
     						 tradableList.get(count).getCancelledVolume(),cancelDetail,tradableList.get(count).getSide(),tradableList.get(count).getId());
     				 MessagePublisher.getInstance().publishCancel(cancelMessage); 
+    				 find=true;
     			 }
     			 count++;
     		 }
@@ -334,13 +335,17 @@ public class ProductBook {
 				{
 			ArrayList<Tradable> tradableList=new ArrayList<>();
 			oldEntries.put(t.getPrice(), tradableList);
- 			t.setCancelledVolume(t.getRemainingVolume());
- 			t.setRemainingVolume(0);
- 		tradableList=oldEntries.get(t.getPrice());
+			}
+			int newCancelledVolume=t.getRemainingVolume();
+			t.setRemainingVolume(0);
+ 			t.setCancelledVolume(newCancelledVolume);
+ 			
+ 			ArrayList<Tradable> tradableList=oldEntries.get(t.getPrice());
  			tradableList.add(t);
+ 			oldEntries.put(t.getPrice(), tradableList);
  			
 				}
 		
 	}
 	
-}
+

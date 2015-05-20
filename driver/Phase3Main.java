@@ -354,7 +354,7 @@ public class Phase3Main {
         try {
             ProductService.getInstance().setMarketState("CLOSED");
         } catch (Exception ex) {
-            System.out.println("Set market State caused an unexpected exception: " + ex.getMessage());
+             System.out.println("Set market State caused an unexpected exception: " + ex.getMessage());
         }
         System.out.println();
 
