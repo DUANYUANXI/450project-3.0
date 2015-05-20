@@ -81,7 +81,7 @@ public class ProductBookSide {
 		else {
 			 ArrayList<Price> sorted = new ArrayList<Price>(bookEntries.keySet()); // Get prices
 			Collections.sort(sorted); // Sort them
-			if (side.equals("BUY")) 
+			if (side.equals("SELL")) 
 				Collections.reverse(sorted); // Reverse them
 			return bookEntries.get(sorted.get(0));
 			

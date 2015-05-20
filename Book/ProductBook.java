@@ -128,10 +128,10 @@ public class ProductBook {
 		{
 			//WHILE (the buyPrice is greater than or equal to the sell price OR the buyPrice is a MKT price OR the
 					//sellPrice is MKT):
-			
-			while((tbp.getValue()>=tsp.getValue()||tbp.isMarket()||tsp.isMarket()))
+			ArrayList<Tradable> topOfBuySide=buySide.getEntriesAtPrice(tbp);
+			while((tbp.getValue()>=tsp.getValue()||tbp.isMarket()||tsp.isMarket())&&topOfBuySide!=null)
 			{
-				ArrayList<Tradable> topOfBuySide=buySide.getEntriesAtPrice(tbp);
+				 topOfBuySide=buySide.getEntriesAtPrice(tbp);
 				HashMap<String, FillMessage> allFills=null;
 				ArrayList<Tradable> toRemove=new ArrayList<>();
 				String s=topOfBuySide.get(0).getProduct();
@@ -153,7 +153,8 @@ public class ProductBook {
 				int lastSaleVolume=determineLastSaleQuantity(allFills);	
 				LastSalePublisher.getInstance().publishLastSale(s, lastSalePrice, lastSaleVolume);
 				//topOfBuySide=buySide.getEntriesAtPrice(tbp);
-				Price buyPrice=sellSide.topOfBookPrice();
+				topOfBuySide=buySide.getEntriesAtPrice(tbp);
+				Price buyPrice=buySide.topOfBookPrice();
 				Price sellPrice=sellSide.topOfBookPrice();
 				if(buyPrice==null||sellPrice==null)
 					break;
