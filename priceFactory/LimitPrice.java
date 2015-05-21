@@ -15,6 +15,9 @@ public class LimitPrice extends Price {
 	this.value=valueln;
 	}
 
+	
+	
+
 	public long getValue() 
 	{
 			return value;

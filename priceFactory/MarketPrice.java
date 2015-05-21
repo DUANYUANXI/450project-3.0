@@ -14,8 +14,7 @@ public class MarketPrice extends Price{
 		super();
 	}	 
 	 
-	
-		public Price subtract(Price p)throws InvalidPriceOperation 
+   	public Price subtract(Price p)throws InvalidPriceOperation 
 		{
 			throw new InvalidPriceOperation("Cannot subtract a LIMIT price from  MARKET price.");
 			

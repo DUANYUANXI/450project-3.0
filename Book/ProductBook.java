@@ -38,10 +38,35 @@ public class ProductBook {
 		userQuotes = new HashSet<>();
 		oldEntries = new HashMap< Price, ArrayList<Tradable>>();
 		setProductSymbol(productSymbolIn);
-		sellSide=new ProductBookSide(this,"SELL");//?
-		buySide=new ProductBookSide(this,"BUY");//?
+		sellSide=new ProductBookSide(this,"SELL");
+		buySide=new ProductBookSide(this,"BUY");
 		
 		
+	}
+	public String getProductSymbol()
+	{
+		return productSymbol;
+	}
+	public ProductBook(ProductBook pb) throws  InvalidInputException
+	{
+		if(pb==null) throw new InvalidInputException("ProductBook object cannot be null");
+		else
+			{
+		userQuotes = new HashSet<>();
+		oldEntries = new HashMap< Price, ArrayList<Tradable>>();
+		setProductSymbol(pb.getProductSymbol());
+		sellSide=pb.getBuySide();
+		buySide=pb.getSellSide();
+		}
+	}
+	
+	private ProductBookSide getBuySide() throws InvalidInputException
+	{
+		return buySide;
+	}
+   private ProductBookSide getSellSide() throws InvalidInputException
+	{
+		return sellSide;
 	}
 	private void setProductSymbol(String productSymbolIn) throws InvalidInputException {
 
@@ -264,9 +289,14 @@ public class ProductBook {
 		
 	}
 	private synchronized Price determineLastSalePrice(HashMap<String, FillMessage> fills){
+		Price p=null;
 		ArrayList<FillMessage> msgs = new ArrayList<>(fills.values());
 		Collections.sort(msgs);
-		return msgs.get(0).getPrice();
+		if(msgs.get(0).getPrice().isMarket())
+			p= PriceFactory.makeMarketPrice();
+		else if(!msgs.get(0).getPrice().isMarket())
+		p=PriceFactory.makeLimitPrice(msgs.get(0).getPrice().getValue());
+		return p;
 		
 	}
 	public synchronized void updateCurrentMarket() throws NoSubscribeException {
@@ -291,15 +321,9 @@ public class ProductBook {
 		}
 		else {
 			if(sellSide.topOfBookPrice()==null){
-				//String s1=buySide.topOfBookPrice().toString();
-				//int s2=buySide.topOfBookVolume();
-				//Price p=sellSide.topOfBookPrice();
-				//String s3=p.toString();
-				//int s4=sellSide.topOfBookVolume();
-				
-				//Price p=PriceFactory.makeLimitPrice("0");
+			
 				 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+"$0.00"+"0";
-				// s=s1+s2+s3+s4;
+				
 				 }
 			else if(sellSide.topOfBookPrice()!=null)
 			{

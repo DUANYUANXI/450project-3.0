@@ -11,6 +11,7 @@ import message.CancelMessage;
 import message.FillMessage;
 import message.InvalidInputException;
 import priceFactory.Price;
+import priceFactory.PriceFactory;
 import publisher.MessagePublisher;
 import publisher.NoSubscribeException;
 import tradable.InvalidVolumeException;
@@ -19,27 +20,41 @@ import tradable.TradableDTO;
 
 public class ProductBookSide {
 	
-	
 	private String side;
 	private HashMap<Price, ArrayList<Tradable>> bookEntries;
 	private TradeProcessor tradeProcessor;
 	private ProductBook productBookParent;
 	
-	//2.4 A reference back to the ProductBook object that this ProductBookSide belongs to. I refer to this as the
-	//¡°parent¡± product book in this handout. This should be set in the constructor (and should not be null).
+	
 	public ProductBookSide(ProductBook object, String sideIn) throws InvalidInputException
 	{
 		bookEntries = new HashMap< Price, ArrayList<Tradable>>();
 		setSide(sideIn);
 		setProductBookSideParent(object);
-		//The TradeProcessor data member should be setup in the constructor, setting it to a
-		//new TradeProcessorPriceTimeImpl object (that class is described later in this handout).
 		tradeProcessor=TradeProcessorPriceTimeImplFactory.MakeTradeProcessorPriceTimeImpl("time", this);
 	}
-	
+	public ProductBookSide(ProductBookSide pdb) throws InvalidInputException
+	{
+		bookEntries = new HashMap< Price, ArrayList<Tradable>>();
+		setSide(pdb.getSide());
+		setProductBookSideParent(pdb.getParent());
+		tradeProcessor=pdb.getTradeProcessor();
+	}
+	private TradeProcessor getTradeProcessor() throws InvalidInputException
+	{
+		return tradeProcessor;
+	}
+	private ProductBook getParent() throws InvalidInputException
+	{
+		return new ProductBook(productBookParent);
+	}
+	private String getSide()
+	{
+		return side;
+	}
 	private void setProductBookSideParent(ProductBook object) throws InvalidInputException {
 		if(object==null) throw new InvalidInputException("The productBook object couldn't be null.");
-		else productBookParent=object;
+		else productBookParent= new ProductBook(object);
 		
 	}
 
@@ -50,7 +65,6 @@ public class ProductBookSide {
 		else
 			side=sideIn;
 	}
-
 	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName)
 	{
 		ArrayList<TradableDTO> listOfTradableDTO=new ArrayList<>();
@@ -85,6 +99,12 @@ public class ProductBookSide {
 			if (side.equals("SELL")) 
 				Collections.reverse(sorted); // Reverse them
 			return bookEntries.get(sorted.get(0));
+		/*	ArrayList<Tradable> list= bookEntries.get(sorted.get(0));
+			ArrayList<Tradable> returnList=new ArrayList<Tradable>();
+			
+			for(int i=0;i<list.size();i++)
+				returnList.add(list.get(i));
+			return returnList;*/
 			
 		}
 			
@@ -178,17 +198,24 @@ public class ProductBookSide {
      }
      public synchronized Price topOfBookPrice()
      {
+    	
     	 if(bookEntries==null||bookEntries.isEmpty())//
     		 return null;
     	 else 
     	 {
+    		 Price p=null;
     		 ArrayList<Price> sorted = new ArrayList<Price>(bookEntries.keySet()); // Get prices
  			Collections.sort(sorted); // Sort them
  			if (side.equals("SELL")) 
  				Collections.reverse(sorted); // Reverse them
- 			return sorted.get(0);
+ 			if(sorted.get(0).isMarket())
+ 				p=PriceFactory.makeMarketPrice();
+ 			else if(!sorted.get(0).isMarket())
+ 				p=PriceFactory.makeLimitPrice(sorted.get(0).getValue());
+ 			return p;
  					
     	 }
+    	
      }
      public synchronized int topOfBookVolume()
      {
