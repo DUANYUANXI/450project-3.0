@@ -9,6 +9,13 @@ import message.InvalidInputException;
 import tradable.InvalidVolumeException;
 import tradable.Tradable;
 
+/**
+ * 
+ * @author xiaoyu yuan, Xingyue Duan, Yu Xi
+ * 05/21/2015
+ */
+
+
 
 public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 

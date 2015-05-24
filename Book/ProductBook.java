@@ -1,5 +1,12 @@
 package Book;
 
+/**
+ * 
+ * @author xiaoyu yuan, Xingyue Duan, Yu Xi
+ * 05/21/2015
+ */
+
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -300,63 +307,20 @@ public class ProductBook {
 		
 	}
 	public synchronized void updateCurrentMarket() throws NoSubscribeException {
-		MarketDataDTO mdto = null;
-		String s=null;
-		if(buySide.topOfBookPrice()==null)
-		{
-			if(lastMarketDataValue==s)
-			{
-				Price closedP=PriceFactory.makeLimitPrice(0);
-				 mdto=new MarketDataDTO(productSymbol,closedP,buySide.topOfBookVolume(),closedP,sellSide.topOfBookVolume());
-					//CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
-					lastMarketDataValue=s;
-			}//?????
-			if(lastMarketDataValue!=s)
-			{
-				Price closedP=PriceFactory.makeLimitPrice(0);
-				 mdto=new MarketDataDTO(productSymbol,closedP,buySide.topOfBookVolume(),closedP,sellSide.topOfBookVolume());
-					CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
-					lastMarketDataValue=s;
-			}
+		Price buyPrice = this.buySide.topOfBookPrice();
+		if(buyPrice == null){
+			buyPrice = PriceFactory.makeLimitPrice(0);
 		}
-		else {
-			if(sellSide.topOfBookPrice()==null){
-			
-				 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+"$0.00"+"0";
-				
-				 }
-			else if(sellSide.topOfBookPrice()!=null)
-			{
-				 s=buySide.topOfBookPrice().toString()+buySide.topOfBookVolume()+sellSide.topOfBookPrice().toString()+sellSide.topOfBookVolume();
-			}
-				if(lastMarketDataValue==null){
-				 if(!(lastMarketDataValue==s))
-				 {
-			
-					 if(sellSide.topOfBookPrice()!=null)
-			 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());
-				
-					 else if(sellSide.topOfBookPrice()==null)
-						 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),PriceFactory.makeLimitPrice("0"),0);
-						 CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
-				lastMarketDataValue=s;
-				 }}
-				 if(lastMarketDataValue!=null)
-				 {
-					 if(!(lastMarketDataValue.equals(s)))
-					 {
-						 
-						 if(sellSide.topOfBookPrice()==null){
-							 Price cp=PriceFactory.makeLimitPrice("0");
-							 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),cp,0);}
-						 else if(sellSide.topOfBookPrice()!=null){
-				 mdto=new MarketDataDTO(productSymbol,buySide.topOfBookPrice(),buySide.topOfBookVolume(),sellSide.topOfBookPrice(),sellSide.topOfBookVolume());}
-					CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
-					lastMarketDataValue=s;
-					 }
-					 
-				 }
-				 }
+		Price sellPrice = this.sellSide.topOfBookPrice();
+		if(sellPrice == null){
+			sellPrice = PriceFactory.makeLimitPrice(0);
+		}
+		String s= buyPrice.toString()+buySide.topOfBookVolume()+sellPrice.toString()+sellSide.topOfBookVolume();
+		if(!s.equals(lastMarketDataValue)){
+			MarketDataDTO mdto = new MarketDataDTO(productSymbol,buyPrice,buySide.topOfBookVolume(),sellPrice,sellSide.topOfBookVolume());
+		 CurrentMarketPublisher.getInstance().publishCurrentMarket(mdto);
+		 lastMarketDataValue=s;
+		}
 	}
 	public void addOldEntry(Tradable t) throws InvalidVolumeException {
 		if(!oldEntries.containsKey(t.getPrice()))

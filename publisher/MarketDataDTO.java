@@ -21,7 +21,7 @@ public class MarketDataDTO {
 	
 	public String toString()
 	{
-		String outPut="Product: "+product+", Buy Price: "+buyPrice.toString()+",Buy Volume: "+buyVolume+", sellPrice"+
+		String outPut="Product: "+product+", Buy Price: "+buyPrice.toString()+",Buy Volume: "+buyVolume+", sellPrice: "+
 				sellPrice+", sellVolume: "+sellVolume;
 		return outPut;
 	}
