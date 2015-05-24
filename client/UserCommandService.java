@@ -200,4 +200,6 @@ public class UserCommandService {
 		this.verifyUser(userName, connld);
 		TickerPublisher.getInstance().unSubscribe(connectedUsers.get(userName), product);
 	}
+	
+	
 }
