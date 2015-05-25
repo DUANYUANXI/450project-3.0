@@ -28,7 +28,7 @@ public interface User {
 	public void connect() throws AlreadyConnectedException, UserNotConnectedException, InvalidConnectionIdExcpetion;
 	public void disConnect() throws UserNotConnectedException, InvalidConnectionIdExcpetion;
 	public void showMarketDisplay() throws UserNotConnectedException, Exception;
-	public String submitOrderCancel(String Product,Price price,int volume,String side) throws InvalidValueException, UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidMarketStateException, NoSubscribeException, InvalidInputException, NoSuchProductException, InvalidVolumeException;
+	public String submitOrder(String product, Price price, int volume, String side) throws InvalidValueException, UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidMarketStateException, NoSubscribeException, InvalidInputException, NoSuchProductException, InvalidVolumeException;
 	public void submitOrderCancel(String product, String side, String orderId) throws UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidMarketStateException, NoSuchProductException, InvalidInputException, NoSubscribeException, OrderNotFoundException, InvalidVolumeException;
 	public void submitQuote(String product, Price buyPrice, int buyVolume, Price sellPrice, int sellVolume) throws UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidVolumeException, InvalidValueException, InvalidMarketStateException, NoSuchProductException, DataValidationException, NoSubscribeException, InvalidInputException;
 	public void submitQuoteCancel(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidInputException, NoSubscribeException, InvalidMarketStateException, NoSuchProductException;

@@ -125,10 +125,9 @@ public class UserImpl implements User {
 			display = new UserDisplayManager(this);
 		display.showMarketDisplay();
 	}
-
-	@Override
-	public String submitOrderCancel(String Product, Price price, int volume,
-			String side) throws InvalidValueException, UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidMarketStateException, NoSubscribeException, InvalidInputException, NoSuchProductException, InvalidVolumeException {
+   @override
+	public String submitOrder(String Product, Price price, int volume,
+			String side) throws InvalidValueException, UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidMarketStateException, NoSubscribeException, InvalidInputException, NoSuchProductException, InvalidVolumeException  {
 		String id =UserCommandService.getInstance().submitOrder(userName, connectedId, Product, price, volume, side);
 		TradableUserData newData = new TradableUserData(userName, Product, side, id);
 		submittedOrders.add(newData);
