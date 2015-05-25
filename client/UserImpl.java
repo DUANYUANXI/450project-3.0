@@ -109,7 +109,7 @@ public class UserImpl implements User {
 	@Override
 	public void connect() throws AlreadyConnectedException, UserNotConnectedException, InvalidConnectionIdExcpetion{
 		UserCommandService.getInstance().connect(this);
-		stockList = UserCommandService.getInstance().getProducts(userName, connectedId);
+		//stockList = UserCommandService.getInstance().getProducts(userName, connectedId);
 	}
 	
 	@Override
