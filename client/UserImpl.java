@@ -3,6 +3,7 @@ package client;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import Book.DataValidationException;
 import Book.InvalidMarketStateException;
 import Book.NoSuchProductException;
 import Book.OrderNotFoundException;
@@ -11,6 +12,7 @@ import message.FillMessage;
 import message.InvalidInputException;
 import priceFactory.InvalidPriceOperation;
 import priceFactory.Price;
+import publisher.AlreadySubscribedException;
 import publisher.NoSubscribeException;
 import tradable.InvalidValueException;
 import tradable.InvalidVolumeException;
@@ -141,104 +143,107 @@ public class UserImpl implements User {
 
 	@Override
 	public void submitQuote(String product, Price buyPrice, int buyVolume,
-			Price sellPrice, int sellVolume) {
-		// TODO Auto-generated method stub
+			Price sellPrice, int sellVolume) throws UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidVolumeException, InvalidValueException, InvalidMarketStateException, NoSuchProductException, DataValidationException, NoSubscribeException, InvalidInputException {
+		UserCommandService.getInstance().submitQuote(userName, connectedId, product, buyPrice, buyVolume, sellPrice, sellVolume);
+		
 		
 	}
 
 	@Override
-	public void submitQuoteCancel(String product) {
-		// TODO Auto-generated method stub
+	public void submitQuoteCancel(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidInputException, NoSubscribeException, InvalidMarketStateException, NoSuchProductException {
+		
+		UserCommandService.getInstance().submitQuoteCancel(userName, connectedId, product);
+	}
+
+	@Override
+	public void subscribeCurrentMarket(String product) throws AlreadySubscribedException, UserNotConnectedException, InvalidConnectionIdExcpetion {
+		
+		UserCommandService.getInstance().subscribeCurrentMarket(userName, connectedId, product);
+	}
+
+	@Override
+	public void subscribeLastSale(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, AlreadySubscribedException {
+		
+		UserCommandService.getInstance().subscribeLastSale(userName, connectedId, product);
+	}
+
+	@Override
+	public void subscribeMessages(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, AlreadySubscribedException {
+		UserCommandService.getInstance().subscribeMessages(userName, connectedId, product);
 		
 	}
 
 	@Override
-	public void subscribeCurrentMarket(String product) {
-		// TODO Auto-generated method stub
+	public void subscribeTicker(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, AlreadySubscribedException {
 		
-	}
-
-	@Override
-	public void subscribeLastSale(String product) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void subscribeMessages(String product) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void subscribeTicker(String product) {
-		// TODO Auto-generated method stub
-		
+		UserCommandService.getInstance().subscribeTicker(userName, connectedId, product);
 	}
 
 	@Override
 	public Price getAllStockValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return userValue.getAllStockValues();
+		
 	}
 
 	@Override
 	public Price getAccountCosts() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return userValue.getAccountCosts();
 	}
 
 	@Override
-	public Price getNetAccountValue() {
-		// TODO Auto-generated method stub
-		return null;
+	public Price getNetAccountValue() throws InvalidPriceOperation {
+		
+		return userValue.getNetAccountValue();
 	}
 
 	@Override
-	public String[][] getBookDepth(String product) {
-		// TODO Auto-generated method stub
-		return null;
+	public String[][] getBookDepth(String product) throws NoSuchProductException, UserNotConnectedException, InvalidConnectionIdExcpetion {
+	return	UserCommandService.getInstance().getBookDepth(userName, connectedId, product);
+		
 	}
 
 	@Override
-	public String getMarketState() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getMarketState() throws UserNotConnectedException, InvalidConnectionIdExcpetion {
+		 return UserCommandService.getInstance().getMarketState(userName, connectedId);
+		
 	}
 
 	@Override
 	public ArrayList<TradableUserData> getOrderIds() {
-		// TODO Auto-generated method stub
-		return null;
+		
+	
+		return submittedOrders;
 	}
 
 	@Override
 	public ArrayList<String> getProductList() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		
+		return stockList;
 	}
 
 	@Override
-	public Price getStockPositionValue(String sym) {
-		// TODO Auto-generated method stub
-		return null;
+	public Price getStockPositionValue(String product) throws InvalidPriceOperation {
+		
+		return userValue.getStockPositionValue(product);
 	}
 
 	@Override
 	public int getStockPositionVolume(String product) {
-		// TODO Auto-generated method stub
-		return 0;
+	
+		return userValue.getStockPositionVolume(product);
 	}
 
 	@Override
 	public ArrayList<String> getHoldings() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return userValue.getHoldings();
 	}
 
 	@Override
-	public ArrayList<TradableDTO> getOrdersWithRemainingQty(String product) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<TradableDTO> getOrdersWithRemainingQty(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion {
+		
+		return UserCommandService.getInstance().getOrdersWithRemainingQty(userName, connectedId, product);
 	}
 }

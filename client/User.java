@@ -3,11 +3,14 @@ package client;
 
 import java.util.ArrayList;
 
+import Book.DataValidationException;
 import Book.InvalidMarketStateException;
 import Book.NoSuchProductException;
 import Book.OrderNotFoundException;
 import message.*;
+import priceFactory.InvalidPriceOperation;
 import priceFactory.Price;
+import publisher.AlreadySubscribedException;
 import publisher.NoSubscribeException;
 import tradable.InvalidValueException;
 import tradable.InvalidVolumeException;
@@ -27,21 +30,21 @@ public interface User {
 	public void showMarketDisplay() throws UserNotConnectedException, Exception;
 	public String submitOrderCancel(String Product,Price price,int volume,String side) throws InvalidValueException, UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidMarketStateException, NoSubscribeException, InvalidInputException, NoSuchProductException, InvalidVolumeException;
 	public void submitOrderCancel(String product, String side, String orderId) throws UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidMarketStateException, NoSuchProductException, InvalidInputException, NoSubscribeException, OrderNotFoundException, InvalidVolumeException;
-	public void submitQuote(String product, Price buyPrice, int buyVolume, Price sellPrice, int sellVolume);
-	public void submitQuoteCancel(String product);
-	public void subscribeCurrentMarket(String product);
-	public void subscribeLastSale(String product);
-	public void subscribeMessages(String product);
-	public void subscribeTicker(String product);
+	public void submitQuote(String product, Price buyPrice, int buyVolume, Price sellPrice, int sellVolume) throws UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidVolumeException, InvalidValueException, InvalidMarketStateException, NoSuchProductException, DataValidationException, NoSubscribeException, InvalidInputException;
+	public void submitQuoteCancel(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, InvalidInputException, NoSubscribeException, InvalidMarketStateException, NoSuchProductException;
+	public void subscribeCurrentMarket(String product) throws AlreadySubscribedException, UserNotConnectedException, InvalidConnectionIdExcpetion;
+	public void subscribeLastSale(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, AlreadySubscribedException;
+	public void subscribeMessages(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, AlreadySubscribedException;
+	public void subscribeTicker(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, AlreadySubscribedException;
 	public Price getAllStockValue();
 	public Price getAccountCosts();
-	public Price getNetAccountValue();
-	public String[][] getBookDepth(String product);
-	public String getMarketState();
+	public Price getNetAccountValue() throws InvalidPriceOperation;
+	public String[][] getBookDepth(String product) throws NoSuchProductException, UserNotConnectedException, InvalidConnectionIdExcpetion;
+	public String getMarketState() throws UserNotConnectedException, InvalidConnectionIdExcpetion;
 	public ArrayList<TradableUserData> getOrderIds();
 	public ArrayList<String> getProductList();
-	public Price getStockPositionValue(String sym);
+	public Price getStockPositionValue(String sym) throws InvalidPriceOperation;
 	public int getStockPositionVolume(String product);
 	public ArrayList<String> getHoldings();
-	public ArrayList<TradableDTO> getOrdersWithRemainingQty(String product);
+	public ArrayList<TradableDTO> getOrdersWithRemainingQty(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion;
 }
