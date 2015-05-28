@@ -44,7 +44,7 @@ public class UserCommandService {
 	private void verifyUser(String userName,Long connld) throws UserNotConnectedException, InvalidConnectionIdExcpetion{
 		if(!connectedUserIds.containsKey(userName))
 			throw new UserNotConnectedException();
-		else if(this.connectedUserIds.get(userName)!=connld)
+		else if((long)this.connectedUserIds.get(userName)!=(long)connld)
 			throw new InvalidConnectionIdExcpetion();
 	}
 	
