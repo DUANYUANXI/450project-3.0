@@ -30,8 +30,7 @@ public class UserImpl implements User {
 	public UserImpl(String userName){
 		this.userName = userName;
 		userValue = new Position();
-		this.submittedOrders = new ArrayList<TradableUserData>();
-		
+		submittedOrders = new ArrayList<TradableUserData>();
 	}
 	
 	@Override
@@ -64,6 +63,12 @@ public class UserImpl implements User {
 			} catch(Exception e){
 				e.printStackTrace();
 			}
+	}
+	
+	
+	public static void main(String[] args){
+		Timestamp timeSt = new Timestamp(System.currentTimeMillis());
+		System.out.println(timeSt.toString());
 	}
 
 	@Override
@@ -104,8 +109,7 @@ public class UserImpl implements User {
 	
 	@Override
 	public void connect() throws AlreadyConnectedException, UserNotConnectedException, InvalidConnectionIdExcpetion{
-		this.connectedId = UserCommandService.getInstance().connect(this);
-		
+		this.connectedId=UserCommandService.getInstance().connect(this);
 		stockList = UserCommandService.getInstance().getProducts(userName, connectedId);
 	}
 	
@@ -242,6 +246,4 @@ public class UserImpl implements User {
 		
 		return UserCommandService.getInstance().getOrdersWithRemainingQty(userName, connectedId, product);
 	}
-
-	
 }
