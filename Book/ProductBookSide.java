@@ -416,9 +416,9 @@ public class ProductBookSide {
      public HashMap<String, FillMessage> tryTrade(Tradable trd) throws NoSubscribeException, InvalidInputException, InvalidVolumeException
      {
     	 HashMap<String, FillMessage> allFills=new HashMap<String, FillMessage>();
-    	 if(side.equals("BUY"))
+    	 if(trd.getSide().equals("BUY"))
     		allFills=trySellAgainstBuySideTrade(trd);
-    	 else if(side.equals("SELL"))
+    	 else if(trd.getSide().equals("SELL"))
     		allFills=tryBuyAgainstSellSideTrade(trd);
     		 
     	 for(Entry<String, FillMessage> ee:allFills.entrySet())

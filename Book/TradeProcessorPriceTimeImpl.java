@@ -114,8 +114,9 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 				{
 					int remainder=entriesAtPrice.get(i).getRemainingVolume()-trd.getRemainingVolume();
 					if(entriesAtPrice.get(i).getPrice().isMarket())
-						tPrice=entriesAtPrice.get(i).getPrice();//???
-					else tPrice=trd.getPrice();//??
+						tPrice=trd.getPrice();
+					else
+						tPrice=entriesAtPrice.get(i).getPrice();
 					FillMessage tfm=new FillMessage(entriesAtPrice.get(i).getUser(),entriesAtPrice.get(i).getProduct(),
 							tPrice,trd.getRemainingVolume(),"Leaving"+remainder,entriesAtPrice.get(i).
 							getSide(),entriesAtPrice.get(i).getId());
