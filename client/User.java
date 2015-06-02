@@ -36,7 +36,7 @@ public interface User {
 	public void subscribeLastSale(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, AlreadySubscribedException;
 	public void subscribeMessages(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, AlreadySubscribedException;
 	public void subscribeTicker(String product) throws UserNotConnectedException, InvalidConnectionIdExcpetion, AlreadySubscribedException;
-	public Price getAllStockValue();
+	public Price getAllStockValue() throws InvalidPriceOperation;
 	public Price getAccountCosts();
 	public Price getNetAccountValue() throws InvalidPriceOperation;
 	public String[][] getBookDepth(String product) throws NoSuchProductException, UserNotConnectedException, InvalidConnectionIdExcpetion;

@@ -18,7 +18,7 @@ public class UserDisplayManager {
 
     public UserDisplayManager(User u) {
         user = u;
-        marketDisplay = new MarketDisplay(u);
+        marketDisplay = new MarketDisplay(u, this);
     }
 
     public void showMarketDisplay() throws Exception {

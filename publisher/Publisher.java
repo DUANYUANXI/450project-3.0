@@ -93,6 +93,7 @@ public class Publisher {
 			    userName = ee.getValue();
 			    for(int i=0;i<userName.size();i++)
 			    {
+			    	if(!allUserName.contains(userName.get(i)))
 			    	allUserName.add(userName.get(i));
 			    }
 			    userName=null;

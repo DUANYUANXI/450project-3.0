@@ -37,14 +37,19 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 	
 	private boolean isNewFill(FillMessage fm)
 	{
-		String key=makeFillKey(fm);	
-		if(!fillMessages.containsKey(key)) return true;
-		FillMessage oldFill=fillMessages.get(key);
-		if(!oldFill.equals(fm)) return true;
-		if(!oldFill.getId().equals(fm.getId())) return true;
-		else return false;
+		 String key = makeFillKey(fm);
+	        if (!fillMessages.containsKey(key)) {
+	            return true;
+	        }
+	        FillMessage oldFill = fillMessages.get(key);
+	        if (oldFill.getSide() != fm.getSide())  return true;
+	        
+	        if (!oldFill.getId().equals(fm.getId()))  return true;
+	        
+	        return false;
+	    }
 		
-	}
+	
 	private void addFillMessage(FillMessage fm) throws InvalidInputException
 	{
 		if(isNewFill(fm))
@@ -69,7 +74,7 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 		ArrayList<Tradable> tradeOut=new ArrayList<Tradable>();
 		ArrayList<Tradable> entriesAtPrice=productBookSide.getEntriesAtTopOfBook();
 		Price tPrice;
-		for(int i=0;i<entriesAtPrice.size();i++)
+		for(Tradable t : entriesAtPrice)
 		{
 			
 			if(trd.getRemainingVolume()==0)
@@ -84,49 +89,51 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 					productBookSide.clearIfEmpty(productBookSide.topOfBookPrice());
 				}
 				return fillMessages;
-			}
-			else if(trd.getRemainingVolume()!=0)
-			{
-				if(trd.getRemainingVolume()>=entriesAtPrice.get(i).getRemainingVolume())
-				{
-					tradeOut.add(entriesAtPrice.get(i));
-					if(entriesAtPrice.get(i).getPrice().isMarket())
-						tPrice=trd.getPrice();//????
-					else tPrice=entriesAtPrice.get(i).getPrice();//??
 				
-					FillMessage tfm=new FillMessage(entriesAtPrice.get(i).getUser(),entriesAtPrice.get(i).getProduct(),
-							tPrice,entriesAtPrice.get(i).getRemainingVolume(),"Leaving 0",entriesAtPrice.get(i).
-							getSide(),entriesAtPrice.get(i).getId());
+			}
+			else 
+			{
+				if(trd.getRemainingVolume()>=t.getRemainingVolume())
+				{
+					tradeOut.add(t);
+					if(t.getPrice().isMarket())
+						tPrice=trd.getPrice();//????
+					else tPrice=t.getPrice();//??
+				
+					
+					
+					FillMessage tfm=new FillMessage(t.getUser(),t.getProduct(),
+							tPrice,t.getRemainingVolume()," Leaving 0",t.getSide(),t.getId());
 					addFillMessage(tfm);
+					
 					FillMessage trdfm=new FillMessage(trd.getUser(),trd.getProduct(),
-							tPrice,entriesAtPrice.get(i).getRemainingVolume(),"Leaving"+(trd.getRemainingVolume()-entriesAtPrice.get(i).getRemainingVolume()),trd.
+							tPrice,t.getRemainingVolume()," Leaving "+(trd.getRemainingVolume()-t.getRemainingVolume()),trd.
 							getSide(),trd.getId());
 					addFillMessage(trdfm);
-					trd.setRemainingVolume(trd.getRemainingVolume()-entriesAtPrice.get(i).getRemainingVolume());
-					entriesAtPrice.get(i).setRemainingVolume(0);
-					//productBookSide.removeTradable(entriesAtPrice.get(i));
-					//entriesAtPrice.remove(i);
+				
+					trd.setRemainingVolume(trd.getRemainingVolume()-t.getRemainingVolume());
+					t.setRemainingVolume(0);
 					
-					productBookSide.addOldEntry(entriesAtPrice.get(i));
+					
+					productBookSide.addOldEntry(t);
 					
 				}
 				else 
 				{
-					int remainder=entriesAtPrice.get(i).getRemainingVolume()-trd.getRemainingVolume();
-					if(entriesAtPrice.get(i).getPrice().isMarket())
+					int remainder=t.getRemainingVolume()-trd.getRemainingVolume();
+					if(t.getPrice().isMarket())
 						tPrice=trd.getPrice();
 					else
-						tPrice=entriesAtPrice.get(i).getPrice();
-					FillMessage tfm=new FillMessage(entriesAtPrice.get(i).getUser(),entriesAtPrice.get(i).getProduct(),
-							tPrice,trd.getRemainingVolume(),"Leaving"+remainder,entriesAtPrice.get(i).
-							getSide(),entriesAtPrice.get(i).getId());
+						tPrice=t.getPrice();
+					FillMessage tfm=new FillMessage(t.getUser(),t.getProduct(),tPrice,trd.getRemainingVolume()," Leaving  "+remainder,
+							t.getSide(),t.getId());
 					addFillMessage(tfm);
 					FillMessage trdfm=new FillMessage(trd.getUser(),trd.getProduct(),
-					tPrice,trd.getRemainingVolume(),"Leaving 0",trd.
+					tPrice,trd.getRemainingVolume()," Leaving 0",trd.
 							getSide(),trd.getId());
 					addFillMessage(trdfm);
 					trd.setRemainingVolume(0);
-					entriesAtPrice.get(i).setRemainingVolume(remainder);
+					t.setRemainingVolume(remainder);
 					productBookSide.addOldEntry(trd);
 						
 					
@@ -137,11 +144,11 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 		}
 		
 		
-		for(int j=0;j<tradeOut.size();j++)
+		for(Tradable j:tradeOut)
 		{
 			
-			if(entriesAtPrice.contains(tradeOut.get(j)))
-				entriesAtPrice.remove(tradeOut.get(j));
+			if(entriesAtPrice.contains(j));
+				entriesAtPrice.remove(j);
 		}
 		if(entriesAtPrice.isEmpty())
 

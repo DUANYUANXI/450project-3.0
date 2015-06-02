@@ -3,8 +3,6 @@ package client;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map.Entry;
-
 import priceFactory.InvalidPriceOperation;
 import priceFactory.Price;
 import priceFactory.PriceFactory;
@@ -39,7 +37,7 @@ public class Position {
 				else
 					holdings.replace(Product, newVolume);
 		}
-		Price totalPrice = PriceFactory.makeLimitPrice(adjustedVolume*price.getValue());
+		Price totalPrice = PriceFactory.makeLimitPrice(volume*price.getValue());
 		if(side.equals("BUY")){
 			accountCosts = accountCosts.subtract(totalPrice);
 		}
@@ -77,12 +75,12 @@ public class Position {
 		return PriceFactory.makeLimitPrice(accountCosts.getValue());
 	}
 	
-	public Price getAllStockValues(){
-		int totalPrice = 0;
-		for(Entry<String, Integer> ee : holdings.entrySet()){
-			totalPrice += ee.getValue();
+	public Price getAllStockValues() throws InvalidPriceOperation{
+		Price totalvalue = PriceFactory.makeLimitPrice(0);
+		for (String s :holdings.keySet()){
+			totalvalue = totalvalue.add(getStockPositionValue(s));
 		}
-		return PriceFactory.makeLimitPrice(totalPrice);
+		return totalvalue;
 	}
 	
 	public Price getNetAccountValue() throws InvalidPriceOperation{

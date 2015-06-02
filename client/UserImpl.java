@@ -87,7 +87,7 @@ public class UserImpl implements User {
 		try {
 			Timestamp timeSt = new Timestamp(System.currentTimeMillis());
 			String summary = " { " + timeSt + " } " + " Fill Message: " + fm.getSide()+ " " + fm.getVolume() + " " + fm.getProduct() + " at " + fm.getProduct() + " " + fm.getPrice().toString()
-			+ " leaving " + " [ " +  fm.getId() + " ]";
+			+ fm.getDetails()+ " [ " +  fm.getId() + " ]"+"\n";
 			display.updateMarketActivity(summary);
 			userValue.updatePositon(fm.getProduct(), fm.getPrice(), fm.getSide(), fm.getVolume());
 		} catch (InvalidPriceOperation e) {
@@ -99,8 +99,8 @@ public class UserImpl implements User {
 	public void acceptMessage(CancelMessage cm) {
 		try{
 			Timestamp timeSt = new Timestamp(System.currentTimeMillis());
-			String summary = " { " + timeSt + " } " + " Fill Message: " + cm.getSide()+ " " + cm.getVolume() + " " + cm.getProduct() + " at " + cm.getProduct() + " " + cm.getPrice().toString()
-					+ " leaving " + " [ " +  cm.getId() + " ]";
+			String summary = " { " + timeSt + " } " + " Cancel Message: " + cm.getSide()+ " " + cm.getVolume() + " " + cm.getProduct() + " at " + cm.getProduct() + " " + cm.getPrice().toString()
+					+" "+ cm.getSide()+" canceled by user " + " [ " +  cm.getId() + " ]"+"\n";
 			display.updateMarketActivity(summary);
 		} catch(Exception e){
 			e.printStackTrace();
@@ -180,7 +180,7 @@ public class UserImpl implements User {
 	}
 
 	@Override
-	public Price getAllStockValue() {
+	public Price getAllStockValue() throws InvalidPriceOperation {
 		return userValue.getAllStockValues();
 		
 	}

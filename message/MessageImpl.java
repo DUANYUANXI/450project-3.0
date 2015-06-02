@@ -96,14 +96,14 @@ public class MessageImpl implements Message {
 	public String toString(){
 		
 		String output="User:"+user+" Product:"+product+" price:"+price.toString()+" Volume:"
-				+volume+",Details: Cancled By User, Side:"+side+"Id:"+id;
+				+volume+",Details:" +details+", Side:"+side+"Id:"+id;
 		return output;
 				
 	}
 
 	@Override
 	public void setDetail(String detail) {
-		// TODO Auto-generated method stub
+		this.details=detail;
 		
 	}
 

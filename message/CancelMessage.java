@@ -65,14 +65,14 @@ public class CancelMessage implements Message, Comparable<CancelMessage>  {
 	}
 
 	@Override
-	public void setVolume(int volume) {
-		// TODO Auto-generated method stub
+	public void setVolume(int volume) throws InvalidInputException {
+		delegate.setVolume(volume);
 		
 	}
 
 	@Override
 	public void setDetail(String detail) {
-		// TODO Auto-generated method stub
+		delegate.setDetail(detail);
 		
 	}
 	
