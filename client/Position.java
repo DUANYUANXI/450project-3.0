@@ -3,6 +3,8 @@ package client;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
 import priceFactory.InvalidPriceOperation;
 import priceFactory.Price;
 import priceFactory.PriceFactory;
@@ -27,7 +29,7 @@ public class Position {
 			adjustedVolume = -volume;
 		}
 		
-		if(!holdings.containsValue(Product)){
+		if(!holdings.containsKey(Product)){
 			holdings.put(Product, adjustedVolume);
 		}
 		else{
@@ -35,7 +37,7 @@ public class Position {
 				if(newVolume == 0)
 					holdings.remove(Product);
 				else
-					holdings.replace(Product, newVolume);
+					holdings.put(Product, newVolume);
 		}
 		Price totalPrice = PriceFactory.makeLimitPrice(volume*price.getValue());
 		if(side.equals("BUY")){

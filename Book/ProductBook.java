@@ -103,31 +103,18 @@ public class ProductBook {
 	
 	public synchronized void checkTooLateToCancel(String orderId) throws InvalidInputException, NoSubscribeException, OrderNotFoundException
 	{
-		
-		 boolean find=false;
-    	 Iterator<Entry<Price, ArrayList<Tradable>>> it = oldEntries.entrySet().iterator();
-    	 while (!find&&it.hasNext())
-    	 {
-    		 Entry<Price,ArrayList<Tradable>> entry=it.next();
-    		 ArrayList<Tradable> tradableList=entry.getValue();
-    		 int tradableListSize=tradableList.size();
-    		 int count=0;
-    		 while(!find&&count<tradableListSize)
-    		 {
-    			 if(tradableList.get(count).getId().equals(orderId)&&!tradableList.get(count).isQuote())
-    			 {
-    				 String cancelDetail="Too Late to Cancel";
-    				 CancelMessage cancelMessage=new CancelMessage(tradableList.get(count).getUser(),tradableList.get(count).getProduct(),tradableList.get(count).getPrice(),
-    						 tradableList.get(count).getCancelledVolume(),cancelDetail,tradableList.get(count).getSide(),tradableList.get(count).getId());
-    				 MessagePublisher.getInstance().publishCancel(cancelMessage); 
-    				 find=true;
-    			 }
-    			 count++;
-    		 }
-    	 }
-    	 
-    	 if(!find) throw new OrderNotFoundException("Order not found.");
-    	 
+		String cancelDetail = "Too late to Cancel";
+		for (Price p : oldEntries.keySet()) {
+            ArrayList<Tradable> tradablelist = oldEntries.get(p);
+           for (int i = 0; i < tradablelist.size(); i++) {
+               if (tradablelist.get(i).getId().equals(orderId)) {
+                 CancelMessage cm = new CancelMessage(tradablelist.get(i).getUser(), tradablelist.get(i).getProduct(),tradablelist.get(i).getPrice(), tradablelist.get(i).getCancelledVolume(), cancelDetail, tradablelist.get(i).getSide(), tradablelist.get(i).getId());
+                   MessagePublisher.getInstance().publishCancel(cm);
+                  return;
+                }
+            }
+        }
+        throw new OrderNotFoundException("Cannot find order");
 	}
 	
 	

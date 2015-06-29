@@ -93,7 +93,26 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 			}
 			else 
 			{
-				if(trd.getRemainingVolume()>=t.getRemainingVolume())
+				if(trd.getRemainingVolume()<t.getRemainingVolume())
+				{
+					int remainder=t.getRemainingVolume()-trd.getRemainingVolume();
+					if(t.getPrice().isMarket())
+						tPrice=trd.getPrice();
+					else
+						tPrice=t.getPrice();
+					FillMessage tfm=new FillMessage(t.getUser(),t.getProduct(),tPrice,trd.getRemainingVolume()," Leaving  "+remainder,
+							t.getSide(),t.getId());
+					addFillMessage(tfm);
+					FillMessage trdfm=new FillMessage(trd.getUser(),trd.getProduct(),
+					tPrice,trd.getRemainingVolume()," Leaving 0",trd.
+							getSide(),trd.getId());
+					addFillMessage(trdfm);
+					trd.setRemainingVolume(0);
+					t.setRemainingVolume(remainder);
+					productBookSide.addOldEntry(trd);
+					
+				}
+				else 
 				{
 					tradeOut.add(t);
 					if(t.getPrice().isMarket())
@@ -116,25 +135,6 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 					
 					
 					productBookSide.addOldEntry(t);
-					
-				}
-				else 
-				{
-					int remainder=t.getRemainingVolume()-trd.getRemainingVolume();
-					if(t.getPrice().isMarket())
-						tPrice=trd.getPrice();
-					else
-						tPrice=t.getPrice();
-					FillMessage tfm=new FillMessage(t.getUser(),t.getProduct(),tPrice,trd.getRemainingVolume()," Leaving  "+remainder,
-							t.getSide(),t.getId());
-					addFillMessage(tfm);
-					FillMessage trdfm=new FillMessage(trd.getUser(),trd.getProduct(),
-					tPrice,trd.getRemainingVolume()," Leaving 0",trd.
-							getSide(),trd.getId());
-					addFillMessage(trdfm);
-					trd.setRemainingVolume(0);
-					t.setRemainingVolume(remainder);
-					productBookSide.addOldEntry(trd);
 						
 					
 				}

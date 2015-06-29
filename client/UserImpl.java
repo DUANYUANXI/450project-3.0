@@ -59,6 +59,9 @@ public class UserImpl implements User {
 	@Override
 	public void acceptCurrentMarket(String product, Price bprice, int bVolume,Price sPrice, int sVolume){
 		try{
+			if(display==null){
+				display = new UserDisplayManager(this);
+			}
 			display.updateMarketData(product, bprice, bVolume, sPrice, sVolume);
 			} catch(Exception e){
 				e.printStackTrace();

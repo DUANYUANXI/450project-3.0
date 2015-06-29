@@ -81,7 +81,7 @@ public class ProductBookSide {
 			    {
 			    	Tradable tradableObject=tradableList.get(i);
 			    
-			    	if(tradableObject.getUser().equals(userName)&&tradableObject.getRemainingVolume()>0)
+			    	if(tradableObject.getUser().equals(userName)&&tradableObject.getRemainingVolume()>0 && !tradableObject.isQuote())
 			    	{
 			    		
 			    	//String productln,Price priceln,int originalVolumeln,int remainingVolumeln,int cancelledVolumeln, String userln,String sideln,boolean isQuoteln, String idln

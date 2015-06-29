@@ -67,7 +67,7 @@ public  TradableDTO ( String productln,Price priceln,int originalVolumeln,int re
  */
 	public String toString()
 	{
-		String outPut="Product: "+product+", Price: "+price.toString()+", OriginalVolume: "+originalVolume+", RemainingVolume"+
+		String outPut="Product: "+product+", Price: "+price.toString()+", OriginalVolume: "+originalVolume+", RemainingVolume "+
 	remainingVolume+", CancelledVolume: "+cancelledVolume+", User: "+user+", Side: "+side+", IsQuote: "+isQuote+", id: "+id;
 		return outPut;
 	}
